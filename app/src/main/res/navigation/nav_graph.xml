@@ -9,15 +9,30 @@
         android:id="@+id/nav_contact_list"
         android:name="my.edu.tarc.contactlist202401.ui.contact_list.ContactListFragment"
         android:label="@string/contact_list_fragment_label"
-        tools:layout="@layout/fragment_contact_list"/>
+        tools:layout="@layout/fragment_contact_list">
+        <action
+            android:id="@+id/action_nav_contact_list_to_nav_add_contact2"
+            app:destination="@id/nav_add_contact" />
+        <action
+            android:id="@+id/action_nav_contact_list_to_nav_profile"
+            app:destination="@id/nav_profile" />
+    </fragment>
     <fragment
         android:id="@+id/nav_profile"
         android:name="my.edu.tarc.contactlist202401.ui.profile.ProfileFragment"
         android:label="@string/profile"
-        tools:layout="@layout/fragment_profile"/>
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_nav_profile_to_nav_contact_list"
+            app:destination="@id/nav_contact_list" />
+    </fragment>
     <fragment
         android:id="@+id/nav_add_contact"
         android:name="my.edu.tarc.contactlist202401.ui.add_contact.AddContactFragment"
         android:label="@string/add_contact_fragment_label"
-        tools:layout="@layout/fragment_add_contact" />
+        tools:layout="@layout/fragment_add_contact" >
+        <action
+            android:id="@+id/action_nav_add_contact_to_nav_contact_list"
+            app:destination="@id/nav_contact_list" />
+    </fragment>
 </navigation>
