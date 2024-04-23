@@ -10,14 +10,17 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.lifecycle.ViewModelProvider
 import my.edu.tarc.contactlist202401.databinding.ActivityMainBinding
+import my.edu.tarc.contactlist202401.ui.contact_list.ContactViewModel
 import my.edu.tarc.mycontact.ui.contact_list.Contact
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-
+    //TODO 3: Declare the Activity View Model
+    private lateinit var contactViewModel: ContactViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -29,6 +32,10 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+        //TODO 4: Initialise View Model
+        contactViewModel = ViewModelProvider(this).get(ContactViewModel::class.java)
+
 
         binding.fab.setOnClickListener { view ->
 /*            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -74,7 +81,7 @@ class MainActivity : AppCompatActivity() {
                 || super.onSupportNavigateUp()
     }
 
-    companion object{
+    /*companion object{
         val contactList = ArrayList<Contact>()
-    }
+    }*/
 }

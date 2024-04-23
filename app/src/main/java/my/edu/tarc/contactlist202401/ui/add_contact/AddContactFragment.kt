@@ -1,7 +1,6 @@
 package my.edu.tarc.contactlist202401.ui.add_contact
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -11,18 +10,20 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
-import my.edu.tarc.contactlist202401.MainActivity
 import my.edu.tarc.contactlist202401.R
 import my.edu.tarc.contactlist202401.databinding.FragmentAddContactBinding
-import my.edu.tarc.contactlist202401.databinding.FragmentContactListBinding
-import my.edu.tarc.contactlist202401.ui.contact_list.ContactListFragment
 import my.edu.tarc.mycontact.ui.contact_list.Contact
+import my.edu.tarc.contactlist202401.ui.contact_list.ContactViewModel
 
 class AddContactFragment : Fragment(), MenuProvider {
     private var _binding: FragmentAddContactBinding? = null
+    //TODO: Insert View Model
+    private val myViewModel: ContactViewModel by activityViewModels()
+
 
     private val binding get() = _binding!!
 
@@ -47,7 +48,8 @@ class AddContactFragment : Fragment(), MenuProvider {
 
         binding.buttonSave.setOnClickListener {
             val newContact = Contact(binding.editTextName.text.toString(), binding.editTextEmailAddress.text.toString(), binding.editTextPhone.text.toString())
-            MainActivity.contactList.add(newContact)
+            //MainActivity.contactList.add(newContact)
+            myViewModel.addContact(newContact)
             Toast.makeText(requireContext(), "Contact Saved", Toast.LENGTH_SHORT).show()
             findNavController().navigateUp()
         }

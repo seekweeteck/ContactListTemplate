@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import my.edu.tarc.contactlist202401.MainActivity
+import androidx.fragment.app.activityViewModels
 import my.edu.tarc.contactlist202401.databinding.FragmentContactListBinding
 import my.edu.tarc.mycontact.ContactAdapter
 import my.edu.tarc.mycontact.ui.contact_list.Contact
@@ -14,13 +14,16 @@ import my.edu.tarc.mycontact.ui.contact_list.Contact
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class ContactListFragment : Fragment() {
+class ContactListFragment : Fragment(), ContactAdapter.OnClickListener {
 
     private var _binding: FragmentContactListBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    //TODO: Declare View Model
+    private val contactViewModel: ContactViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,13 +39,25 @@ class ContactListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = ContactAdapter()
-        adapter.setContact(MainActivity.contactList)
+        adapter.setOnClickListener(this)
+
+        contactViewModel.contactList.observe(viewLifecycleOwner){
+            if(it.isEmpty()){
+                Toast.makeText(context, "No record", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(context, "Record number " + it.size, Toast.LENGTH_SHORT).show()
+            }
+            adapter.setContact(it)
+        }
         binding.recycleListView.adapter = adapter
-        Toast.makeText(requireContext(), "Record Count:" + MainActivity.contactList.size, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onItemClick(item: Contact) {
+        Toast.makeText(requireActivity(), "Contact name ${item.name}", Toast.LENGTH_SHORT).show()
     }
 }

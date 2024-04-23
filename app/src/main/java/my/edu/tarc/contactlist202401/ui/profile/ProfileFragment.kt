@@ -1,5 +1,7 @@
 package my.edu.tarc.contactlist202401.ui.profile
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
@@ -12,6 +14,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -35,6 +38,7 @@ class ProfileFragment : Fragment(), MenuProvider {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private lateinit var sharedPreferences : SharedPreferences
 
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()){ uri: Uri? ->
         if(uri != null){
@@ -58,6 +62,7 @@ class ProfileFragment : Fragment(), MenuProvider {
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
+        readSharedPreference()
         readProfilePicture()
 
         binding.imageViewProfile.setOnClickListener {
@@ -66,9 +71,31 @@ class ProfileFragment : Fragment(), MenuProvider {
 
         binding.buttonSaveProfile.setOnClickListener {
             saveProfilePicture()
+            saveSharedPreferences()
+            Toast.makeText(requireActivity(), "Profile Saved", Toast.LENGTH_SHORT).show()
         }
 
         Log.d("Profile Fragment", "onCreate")
+    }
+
+    private fun saveSharedPreferences() {
+        with(sharedPreferences.edit()){
+            putString("name", binding.editTextProfileName.text.toString())
+            putString("phone", binding.editTextProfilePhone.text.toString())
+            putString("email", binding.editTextProfileEmail.text.toString())
+            apply()
+        }
+    }
+
+    private fun readSharedPreference() {
+        sharedPreferences = requireActivity().getSharedPreferences("profile_pref", Context.MODE_PRIVATE)
+        val name = sharedPreferences.getString("name", "")
+        val email = sharedPreferences.getString("email", "")
+        val phone = sharedPreferences.getString("phone", "")
+
+        binding.editTextProfileName.setText(name)
+        binding.editTextProfileEmail.setText(email)
+        binding.editTextProfilePhone.setText(phone)
     }
 
     override fun onDestroyView() {
