@@ -17,6 +17,4 @@
     <string name="create_url">contact/create.php</string>
     <string name="download">Download</string>
     <string name="contact_id_error">Contact ID is missing.</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

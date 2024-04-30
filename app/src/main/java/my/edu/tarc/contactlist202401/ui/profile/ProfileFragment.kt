@@ -16,11 +16,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
+import com.google.firebase.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storage
 import my.edu.tarc.contactlist202401.R
 import my.edu.tarc.contactlist202401.databinding.FragmentProfileBinding
 import java.io.File
@@ -71,6 +76,7 @@ class ProfileFragment : Fragment(), MenuProvider {
 
         binding.buttonSaveProfile.setOnClickListener {
             saveProfilePicture()
+            saveProfilePictureToCloud()
             saveSharedPreferences()
             Toast.makeText(requireActivity(), "Profile Saved", Toast.LENGTH_SHORT).show()
         }
@@ -147,6 +153,21 @@ class ProfileFragment : Fragment(), MenuProvider {
             }
         }catch (e: FileNotFoundException){
             e.printStackTrace()
+        }
+    }
+
+    private fun saveProfilePictureToCloud(){
+        val storageRef = Firebase.storage.reference
+        val filename = "profile.png"
+        val file = File(this.context?.filesDir, filename)
+
+        sharedPreferences = requireActivity().getSharedPreferences("profile_pref", Context.MODE_PRIVATE)
+        val userID = sharedPreferences.getString("phone", "")
+
+        if(!userID.isNullOrEmpty()){
+            storageRef.child("images/$userID").putFile(file.toUri())
+        }else{
+            Toast.makeText(requireActivity(), "Profile info incomplete", Toast.LENGTH_SHORT).show()
         }
     }
 }
